@@ -1,71 +1,66 @@
-_G.HeadSize = 3.5
-_G.Disabled = true
+_G.HSz = 3.5
+_G.Dsbl = true
 
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+local u = game:GetService("UserInputService")
+local r = game:GetService("RunService")
+local p = game:GetService("Players")
+local l = p.LocalPlayer
 
--- Create GUI
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.CoreGui
+local g = Instance.new("ScreenGui")
+g.Parent = game.CoreGui
 
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 200, 0, 150)
-Frame.Position = UDim2.new(0, 10, 0, 10)
-Frame.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1)
-Frame.Visible = false
-Frame.Parent = ScreenGui
+local f = Instance.new("Frame")
+f.Size = UDim2.new(0, 200, 0, 150)
+f.Position = UDim2.new(0, 10, 0, 10)
+f.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1)
+f.Visible = false
+f.Parent = g
 
-local ToggleESPButton = Instance.new("TextButton")
-ToggleESPButton.Size = UDim2.new(0, 180, 0, 50)
-ToggleESPButton.Position = UDim2.new(0, 10, 0, 10)
-ToggleESPButton.Text = "Toggle head"
-ToggleESPButton.Parent = Frame
+local t = Instance.new("TextButton")
+t.Size = UDim2.new(0, 180, 0, 50)
+t.Position = UDim2.new(0, 10, 0, 10)
+t.Text = "Toggle head"
+t.Parent = f
 
-local HeadSizeLabel = Instance.new("TextLabel")
-HeadSizeLabel.Size = UDim2.new(0, 180, 0, 30)
-HeadSizeLabel.Position = UDim2.new(0, 10, 0, 70)
-HeadSizeLabel.Text = "Head Size: " .. _G.HeadSize
-HeadSizeLabel.Parent = Frame
+local hl = Instance.new("TextLabel")
+hl.Size = UDim2.new(0, 180, 0, 30)
+hl.Position = UDim2.new(0, 10, 0, 70)
+hl.Text = "Head Size: " .. _G.HSz
+hl.Parent = f
 
-local HeadSizeSlider = Instance.new("TextButton")
-HeadSizeSlider.Size = UDim2.new(0, 180, 0, 30)
-HeadSizeSlider.Position = UDim2.new(0, 10, 0, 110)
-HeadSizeSlider.Text = "Adjust Head Size"
-HeadSizeSlider.Parent = Frame
+local hs = Instance.new("TextButton")
+hs.Size = UDim2.new(0, 180, 0, 30)
+hs.Position = UDim2.new(0, 10, 0, 110)
+hs.Text = "Adjust Head Size"
+hs.Parent = f
 
--- Toggle GUI visibility with 'K' key
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
-        Frame.Visible = not Frame.Visible
+u.InputBegan:Connect(function(i, gP)
+    if not gP and i.KeyCode == Enum.KeyCode.K then
+        f.Visible = not f.Visible
     end
 end)
 
--- Toggle ESP
-ToggleESPButton.MouseButton1Click:Connect(function()
-    _G.Disabled = not _G.Disabled
+t.MouseButton1Click:Connect(function()
+    _G.Dsbl = not _G.Dsbl
 end)
 
--- Adjust Head Size
-HeadSizeSlider.MouseButton1Click:Connect(function()
-    if _G.HeadSize < 25 then
-        _G.HeadSize = _G.HeadSize + 0.5
+hs.MouseButton1Click:Connect(function()
+    if _G.HSz < 25 then
+        _G.HSz = _G.HSz + 0.5
     else
-        _G.HeadSize = 0.5
+        _G.HSz = 0.5
     end
-    HeadSizeLabel.Text = "Head Size: " .. _G.HeadSize
+    hl.Text = "Head Size: " .. _G.HSz
 end)
 
--- ESP Functionality
-RunService.RenderStepped:Connect(function()
-    if not _G.Disabled then
-        for _, v in next, Players:GetPlayers() do
-            if v ~= LocalPlayer then  -- Ensure ESP is not applied to the local player
+r.RenderStepped:Connect(function()
+    if not _G.Dsbl then
+        for _, v in next, p:GetPlayers() do
+            if v ~= l then
                 pcall(function()
                     if v.Character and v.Character:FindFirstChild("Head") then
-                        v.Character.Head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
-                        v.Character.Head.Transparency = 0.4  -- Set to 0.3 for semi-transparency
+                        v.Character.Head.Size = Vector3.new(_G.HSz, _G.HSz, _G.HSz)
+                        v.Character.Head.Transparency = 0.4
                         v.Character.Head.BrickColor = BrickColor.new("Red")
                         v.Character.Head.Material = "Neon"
                         v.Character.Head.CanCollide = false
@@ -77,71 +72,70 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
-local BoxESP = {}
+local b = {}
 
-function BoxESP.Create(Player)
-    if Player == LocalPlayer then return end  -- Skip creating ESP box for the local player
-    if BoxESP[Player] then return end
+function b.c(p)
+    if p == l then return end
+    if b[p] then return end
 
-    local character = Player.Character
-    if character and character:IsDescendantOf(workspace) and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0 then
-        local Box = Drawing.new("Square")
-        Box.Visible = false
-        Box.Color = Color3.fromRGB(255, 255, 255)
-        Box.Filled = false
-        Box.Thickness = 1
+    local ch = p.Character
+    if ch and ch:IsDescendantOf(workspace) and ch:FindFirstChild("Humanoid") and ch.Humanoid.Health > 0 then
+        local box = Drawing.new("Square")
+        box.Visible = false
+        box.Color = Color3.fromRGB(255, 255, 255)
+        box.Filled = false
+        box.Thickness = 1
 
-        local Connection
-        Connection = RunService.RenderStepped:Connect(function()
-            if character and character:IsDescendantOf(workspace) and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0 then
-                local Pos, Visible = workspace.CurrentCamera:WorldToViewportPoint(character.HumanoidRootPart.Position)
-                local scale_factor = 1 / (Pos.Z * math.tan(math.rad(workspace.CurrentCamera.FieldOfView * 0.5)) * 2) * 100
-                local width, height = math.floor(40 * scale_factor), math.floor(62 * scale_factor)
+        local con
+        con = r.RenderStepped:Connect(function()
+            if ch and ch:IsDescendantOf(workspace) and ch:FindFirstChild("Humanoid") and ch.Humanoid.Health > 0 then
+                local pos, vis = workspace.CurrentCamera:WorldToViewportPoint(ch.HumanoidRootPart.Position)
+                local sf = 1 / (pos.Z * math.tan(math.rad(workspace.CurrentCamera.FieldOfView * 0.5)) * 2) * 100
+                local w, h = math.floor(40 * sf), math.floor(62 * sf)
 
-                if Visible then
-                    Box.Size = Vector2.new(width, height)
-                    Box.Position = Vector2.new(Pos.X - Box.Size.X / 2, Pos.Y - Box.Size.Y / 2)
-                    Box.Visible = true
+                if vis then
+                    box.Size = Vector2.new(w, h)
+                    box.Position = Vector2.new(pos.X - box.Size.X / 2, pos.Y - box.Size.Y / 2)
+                    box.Visible = true
                 else
-                    Box.Visible = false
+                    box.Visible = false
                 end
             else
-                Box:Destroy()
-                Connection:Disconnect()
-                BoxESP[Player] = nil
+                box:Destroy()
+                con:Disconnect()
+                b[p] = nil
             end
         end)
 
-        BoxESP[Player] = {
-            Box = Box,
-            Connection = Connection
+        b[p] = {
+            Box = box,
+            Connection = con
         }
     end
 end
 
-local function updateESP()
-    for _, Player in pairs(Players:GetPlayers()) do
-        if Player.Character then
-            BoxESP.Create(Player)
+local function uE()
+    for _, p in pairs(p:GetPlayers()) do
+        if p.Character then
+            b.c(p)
         end
     end
 end
 
-RunService.RenderStepped:Connect(updateESP)
+r.RenderStepped:Connect(uE)
 
--- Ensure ESP boxes for the local player are removed if needed
-Players.PlayerRemoving:Connect(function(player)
-    if BoxESP[player] then
-        BoxESP[player].Box:Destroy()
-        BoxESP[player].Connection:Disconnect()
-        BoxESP[player] = nil
+p.PlayerRemoving:Connect(function(p)
+    if b[p] then
+        b[p].Box:Destroy()
+        b[p].Connection:Disconnect()
+        b[p] = nil
     end
 end)
 
-LocalPlayer.CharacterAdded:Connect(function()
-    if BoxESP[LocalPlayer] then
-        BoxESP[LocalPlayer].Box:Destroy()
-        BoxESP[LocalPlayer].Connection:Disconnect()
-        BoxESP[LocalPlayer] = nil
+l.CharacterAdded:Connect(function()
+    if b[l] then
+        b[l].Box:Destroy()
+        b[l].Connection:Disconnect()
+        b[l] = nil
     end
 end)
